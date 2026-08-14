@@ -12,5 +12,4 @@ app.post('/todos', async (req, res) => {
   const todo = await Todo.create({ text: req.body.text, done: false });
   res.json(todo);
 });
-
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(3000, () => console.log('Todo API running via CI/CD pipeline'));
