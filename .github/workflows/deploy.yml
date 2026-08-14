@@ -32,6 +32,10 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             docker pull ${{ secrets.DOCKERHUB_USERNAME }}/todo-app:latest
+            docker network create todo-net || true
+            docker stop mongo || true
+            docker rm mongo || true
+            docker run -d --name mongo --network todo-net mongo:6
             docker stop todo-app || true
             docker rm todo-app || true
-            docker run -d --name todo-app -p 3000:3000 ${{ secrets.DOCKERHUB_USERNAME }}/todo-app:latest
+            docker run -d --name todo-app --network todo-net -p 3000:3000 -e MONGO_URL=mongodb://mongo:27017/tododb ${{ secrets.DOCKERHUB_USERNAME }}/todo-app:latest
